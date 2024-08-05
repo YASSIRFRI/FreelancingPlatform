@@ -1,18 +1,18 @@
-<!-- resources/views/dashboard.blade.php -->
 @extends('layouts.app')
 
 @section('title', 'Dashboard')
 
-@section('username', 'Sampson Okyere')
+@section('username', $user->name)
 
 @section('content')
-<div class="bg-white shadow rounded-lg p-4 mb-6 flex justify-between items-center">
+<!-- Balance Summary -->
+<div class="bg-white shadow rounded-lg p-6 mb-8 flex justify-between items-center">
     <div class="text-center">
-        <h3 class="text-lg font-bold">Total Deposit</h3>
-        <p class="text-green-500 font-semibold">GHC600.00</p>
+        <h3 class="text-2xl font-bold">Total Deposit</h3>
+        <p class="text-green-500 text-xl font-semibold">$600.00</p>
     </div>
-    <div class="w-16 h-16 relative">
-        <svg class="absolute top-0 left-0" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+    <div class="w-24 h-24 relative flex items-center justify-center">
+        <svg class="absolute inset-0" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
             <path
                 class="text-gray-300"
                 d="M18 2.0845
@@ -34,55 +34,118 @@
         </svg>
     </div>
     <div class="text-center">
-        <h3 class="text-lg font-bold">Current Balance</h3>
-        <p class="text-green-500 font-semibold">GHC200.00</p>
+        <h3 class="text-2xl font-bold">Current Balance</h3>
+        <p class="text-green-500 text-xl font-semibold">$200.00</p>
     </div>
 </div>
 
-<div class="grid grid-cols-2 gap-4">
+<!-- Navigation Grid -->
+<div class="grid grid-cols-3 gap-6 mb-8">
     <!-- Deposit Route -->
-    <x-dashboard-button :href="route('deposits.index')">
-        <i class="fas fa-wallet mr-2"></i>Deposits
-    </x-dashboard-button>
+    <a href="{{ route('deposits.index') }}" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-wallet fa-2x mb-2"></i>
+        Deposits
+    </a>
 
     <!-- Withdrawal Route -->
-    <x-dashboard-button :href="route('withdrawals.index')">
-        <i class="fas fa-money-bill-wave mr-2"></i>Withdrawals
-    </x-dashboard-button>
+    <a href="{{ route('withdrawals.index') }}" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-money-bill-wave fa-2x mb-2"></i>
+        Withdrawals
+    </a>
 
-    <!-- My Profile Button (No route specified) -->
-    <x-dashboard-button href="#">
-        <i class="fas fa-user mr-2"></i>My Profile
-    </x-dashboard-button>
+    <!-- My Profile Button -->
+    <a href="{{ route('profile.index') }}" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-user fa-2x mb-2"></i>
+        My Profile
+    </a>
 
-    <!-- Buying Button (No route specified) -->
-    <x-dashboard-button href="#">
-        <i class="fas fa-shopping-cart mr-2"></i>Buying
-    </x-dashboard-button>
+    <!-- Buying Button -->
+    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-shopping-cart fa-2x mb-2"></i>
+        Buying
+    </a>
 
-    <!-- Selling Button (No route specified) -->
-    <x-dashboard-button href="#">
-        <i class="fas fa-tags mr-2"></i>Selling
-    </x-dashboard-button>
+    <!-- Selling Button -->
+    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-tags fa-2x mb-2"></i>
+        Selling
+    </a>
 
-    <!-- How It Works Button (No route specified) -->
-    <x-dashboard-button href="#">
-        <i class="fas fa-info-circle mr-2"></i>How It Works
-    </x-dashboard-button>
+    <!-- How It Works Button -->
+    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-info-circle fa-2x mb-2"></i>
+        How It Works
+    </a>
 
-    <!-- Terms & Conditions and Privacy & Policy Button (No route specified) -->
-    <x-dashboard-button href="#">
-        <i class="fas fa-file-contract mr-2"></i>T&C, P&P
-    </x-dashboard-button>
+    <!-- Terms & Conditions and Privacy & Policy Button -->
+    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-file-contract fa-2x mb-2"></i>
+        T&C, P&P
+    </a>
 
-    <!-- Contact Us Button (No route specified) -->
-    <x-dashboard-button href="#">
-        <i class="fas fa-phone-alt mr-2"></i>Contact Us
-    </x-dashboard-button>
+    <!-- Contact Us Button -->
+    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-phone-alt fa-2x mb-2"></i>
+        Contact Us
+    </a>
 
-    <!-- Market Button (No route specified) -->
-    <x-dashboard-button href="#">
-        <i class="fas fa-store mr-2"></i>Market
-    </x-dashboard-button>
+    <!-- Market Button -->
+    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+        <i class="fas fa-store fa-2x mb-2"></i>
+        Market
+    </a>
+</div>
+
+<!-- Latest Orders -->
+<div class="bg-white shadow rounded-lg p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-4">Latest Orders</h2>
+    <ul class="space-y-4">
+        @foreach ($latestOrders as $order)
+        <li class="border-b border-gray-200 pb-2">
+            <div class="flex justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold">{{ $order->service->name }}</h3>
+                    <p class="text-gray-600">{{ $order->service->description }}</p>
+                </div>
+                <span class="text-green-500 font-semibold">${{ $order->amount }}</span>
+            </div>
+        </li>
+        @endforeach
+    </ul>
+</div>
+
+<!-- Latest Deposits -->
+<div class="bg-white shadow rounded-lg p-6 mb-8">
+    <h2 class="text-2xl font-bold mb-4">Latest Deposits</h2>
+    <ul class="space-y-4">
+        @foreach ($latestDeposits as $deposit)
+        <li class="border-b border-gray-200 pb-2">
+            <div class="flex justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold">Deposit #{{ $deposit->id }}</h3>
+                    <p class="text-gray-600">{{ $deposit->created_at->format('M d, Y') }}</p>
+                </div>
+                <span class="text-green-500 font-semibold">${{ $deposit->amount }}</span>
+            </div>
+        </li>
+        @endforeach
+    </ul>
+</div>
+
+<div class="bg-white shadow rounded-lg p-6">
+    <h2 class="text-2xl font-bold mb-4">Notifications</h2>
+    <ul class="space-y-4">
+        @foreach ($notifications as $notification)
+        <li class="border-b border-gray-200 pb-2">
+            <div class="flex justify-between">
+                <div>
+                    <h3 class="text-lg font-semibold">{{ $notification->title }}</h3>
+                    <p class="text-gray-600">{{ $notification->message }}</p>
+                </div>
+                <span class="text-gray-500 text-sm">{{ $notification->created_at->diffForHumans() }}</span>
+            </div>
+        </li>
+        @endforeach
+    </ul>
 </div>
 @endsection

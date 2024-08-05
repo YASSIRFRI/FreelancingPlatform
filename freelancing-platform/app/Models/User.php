@@ -2,47 +2,64 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 
-        'email', 
-        'password',
-        'verified',
-        'description',
-        'profile_picture', // Correcting spelling here from 'profil_picture' to 'profile_picture'
-        'balance'
+        'name', 'email', 'password', 'verified', 'description', 'profile_picture', 'balance'
     ];
 
     protected $hidden = [
-        'password', 
-        'remember_token',
+        'password', 'remember_token',
     ];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'verified' => 'boolean',
     ];
 
     /**
-     * Get all the deposits for the user.
+     * Get the notifications for the user.
      */
-    public function deposits()
+    public function notifications(): HasMany
     {
-        return $this->hasMany(Deposit::class);
+        return $this->hasMany(Notification::class, 'user_id');
     }
 
     /**
-     * Get all the withdrawals for the user.
+     * Get the services offered by the user.
      */
-    public function withdrawals()
+    public function services(): HasMany
     {
-        return $this->hasMany(Withdrawal::class);
+        return $this->hasMany(Service::class, 'seller_id');
+    }
+
+    /**
+     * Get the orders where the user is the buyer.
+     */
+    public function buyerOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    /**
+     * Get the orders where the user is the seller.
+     */
+    public function sellerOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'seller_id');
+    }
+
+    /**
+     * Get the reviews written by the user.
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'buyer_id');
     }
 }

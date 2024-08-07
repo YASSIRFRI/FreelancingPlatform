@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Withdrawal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class WithdrawalController extends Controller
 {
@@ -17,8 +18,8 @@ class WithdrawalController extends Controller
     {
         // Fetch withdrawals for the authenticated user
         $withdrawals = Auth::user()->withdrawals()->orderBy('created_at', 'desc')->get();
-        
-        return view('withdrawals.index', compact('withdrawals'));
+        $user=Auth::user();
+        return view('withdrawals.index', compact('withdrawals','user'));
     }
 
     /**
@@ -28,7 +29,8 @@ class WithdrawalController extends Controller
      */
     public function create()
     {
-        return view('withdrawals.create');
+        $user=Auth::user();
+        return view('withdrawals.create',compact('user'));
     }
 
     /**
@@ -44,10 +46,19 @@ class WithdrawalController extends Controller
         ]);
 
         // Create a new withdrawal for the authenticated user
+        $user=Auth::user();
+        if($request->amount>$user->balance){
+            return redirect()->route('withdrawals.index')-> with('error','Insufficient balance.');
+        }
+
+        $user->balance-=$request->amount;
+        $user->save();
+
         Withdrawal::create([
             'user_id' => Auth::id(),
             'amount' => $request->amount,
             'state' => 'pending',
+            'created_at'=>Carbon::now()
         ]);
 
         return redirect()->route('withdrawals.index')->with('success', 'Withdrawal request submitted.');

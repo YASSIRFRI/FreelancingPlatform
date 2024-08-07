@@ -18,8 +18,9 @@ class DashboardController extends Controller
         $latestOrders = Order::where('buyer_id', $user->id)->latest()->take(5)->get();
         $latestDeposits = Deposit::where('user_id', $user->id)->latest()->take(5)->get();
         $notifications = Notification::where('user_id', $user->id)->latest()->take(5)->get();
+        $unreadNotifications = Notification::where('user_id', $user->id)->where('is_read', false)->count();
 
         // Pass data to the view
-        return view('dashboard', compact('user', 'latestOrders', 'latestDeposits', 'notifications'));
+        return view('dashboard', compact('user', 'latestOrders', 'latestDeposits', 'notifications', 'unreadNotifications'));
     }
 }

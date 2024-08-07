@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\OrderCreatedNotification;
 
 class OrderController extends Controller
 {
@@ -16,11 +18,14 @@ class OrderController extends Controller
      */
     public function index()
     {
-        // Retrieve all orders for the authenticated user as a buyer
-        $orders = Order::where('buyer_id', Auth::id())->latest()->get();
+        // Get the authenticated user
+        $user = Auth::user();
 
-        // Return the orders index view
-        return view('orders.index', compact('orders'));
+        // Retrieve orders where the user is the seller, with pagination
+        $orders = Order::where('seller_id', $user->id)->latest()->paginate(10);
+
+        // Pass both orders and user to the view
+        return view('orders.index', compact('orders', 'user'));
     }
 
     /**
@@ -28,44 +33,37 @@ class OrderController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create($serviceId)
     {
-        // Retrieve all available services
-        $services = Service::all();
-
-        // Return the order creation form view
-        return view('orders.create', compact('services'));
+        $service = Service::findOrFail($serviceId);
+        $user=Auth::user();
+        return view('orders.create', compact('service','user'));
     }
 
-    /**
-     * Store a newly created order in the database.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
+    public function store(Request $request, $serviceId)
     {
-        // Validate the request data
+        $service = Service::findOrFail($serviceId);
+        $buyer = Auth::user();
+        $seller = User::findOrFail($service->user_id);
+
         $request->validate([
-            'service_id' => 'required|exists:services,id',
-            'amount' => 'required|numeric|min:0',
+            'description' => 'nullable|string|max:500',
         ]);
 
-        // Find the selected service
-        $service = Service::findOrFail($request->service_id);
+        $order = new Order();
+        $order->buyer_id = $buyer->id;
+        $order->seller_id = $seller->id;
+        $order->service_id = $service->id;
+        $order->amount = $service->price;
+        $order->description = $request->description;
+        $order->status = 'pending';
+        $order->save();
+        $seller->notify(new OrderCreatedNotification($order));
 
-        // Create a new order
-        Order::create([
-            'buyer_id' => Auth::id(),
-            'seller_id' => $service->seller_id,
-            'service_id' => $service->id,
-            'status' => 'pending', // Default status
-            'amount' => $request->amount,
-        ]);
-
-        // Redirect to the orders index page with a success message
-        return redirect()->route('orders.index')->with('success', 'Order created successfully!');
+        return redirect()->route('orders.show', $order->id)
+                         ->with('success', 'Order placed successfully!');
     }
+
 
     /**
      * Display the specified order.
@@ -76,9 +74,10 @@ class OrderController extends Controller
     public function show($id)
     {
         // Find the order by its ID
-        $order = Order::findOrFail($id);
+        $order = Order::with(['buyer', 'seller', 'service'])->findOrFail($id);
+        $user=Auth::user();
 
         // Return the order details view
-        return view('orders.show', compact('order'));
+        return view('orders.show', compact('order','user'));
     }
 }

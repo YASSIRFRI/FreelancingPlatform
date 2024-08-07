@@ -10,16 +10,19 @@ class Service extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'seller_id',
         'name',
         'description',
         'price',
+        'image',
+        'tag',
     ];
 
     /**
      * Get the seller associated with the service.
      */
-    public function seller()
+    public function user()
     {
         return $this->belongsTo(User::class, 'seller_id');
     }

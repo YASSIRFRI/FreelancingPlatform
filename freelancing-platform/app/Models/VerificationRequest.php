@@ -5,12 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Withdrawal extends Model
+class VerificationRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'amount', 'state','created_at','updated_at'];
+    protected $fillable = [
+        'user_id',
+        'verification_paper',
+        'status',
+    ];
 
+    // Relationship with User
     public function user()
     {
         return $this->belongsTo(User::class);

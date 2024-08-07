@@ -8,6 +8,9 @@ use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SellerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,10 +62,49 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('orders', OrderController::class)->only(['index', 'create', 'store', 'show']);
 
 
+    //services routes
+    Route::resource('services', ServiceController::class)->except(['show']);
+    Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services.show');
+
+
+
+
+    //verification routes
+    Route::post('/verification/submit', [VerificationController::class, 'submit'])->name('verification.submit');
+
+
+
+    //seller views 
+    Route::get('/seller/{username}', [SellerController::class, 'show'])->name('sellers.show');
+
+
+
+
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/verify', [ProfileController::class, 'verify'])->name('profile.verify');
+
+
+
+    //market 
+    Route::get('/market', [ServiceController::class, 'exploreMarket'])->name('market.explore');
+
+
+
+    Route::get('/order/create/{serviceId}', [OrderController::class, 'create'])->name('order.create');
+    Route::post('/order/store/{serviceId}', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/order/{orderid}',[OrderController::class, 'show'])->name('orders.show');
+
+
+
+
 });
 
 // Logout route (POST)

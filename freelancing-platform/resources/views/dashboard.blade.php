@@ -9,7 +9,7 @@
 <div class="bg-white shadow rounded-lg p-6 mb-8 flex justify-between items-center">
     <div class="text-center">
         <h3 class="text-2xl font-bold">Total Deposit</h3>
-        <p class="text-green-500 text-xl font-semibold">$600.00</p>
+        <p class="text-green-500 text-xl font-semibold">${{ number_format($user->deposits->sum('amount'), 2) }}</p>
     </div>
     <div class="w-24 h-24 relative flex items-center justify-center">
         <svg class="absolute inset-0" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@
     </div>
     <div class="text-center">
         <h3 class="text-2xl font-bold">Current Balance</h3>
-        <p class="text-green-500 text-xl font-semibold">$200.00</p>
+        <p class="text-green-500 text-xl font-semibold">${{ number_format($user->balance, 2) }}</p>
     </div>
 </div>
 
@@ -66,8 +66,8 @@
     </a>
 
     <!-- Selling Button -->
-    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
-        <i class="fas fa-tags fa-2x mb-2"></i>
+    <a href="{{ route('orders.index') }}" class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center text-green-600 font-semibold text-xl hover:bg-green-50 transition">
+    <i class="fas fa-tags fa-2x mb-2"></i>
         Selling
     </a>
 
@@ -107,7 +107,7 @@
                     <h3 class="text-lg font-semibold">{{ $order->service->name }}</h3>
                     <p class="text-gray-600">{{ $order->service->description }}</p>
                 </div>
-                <span class="text-green-500 font-semibold">${{ $order->amount }}</span>
+                <span class="text-green-500 font-semibold">${{ number_format($order->amount, 2) }}</span>
             </div>
         </li>
         @endforeach
@@ -125,7 +125,7 @@
                     <h3 class="text-lg font-semibold">Deposit #{{ $deposit->id }}</h3>
                     <p class="text-gray-600">{{ $deposit->created_at->format('M d, Y') }}</p>
                 </div>
-                <span class="text-green-500 font-semibold">${{ $deposit->amount }}</span>
+                <span class="text-green-500 font-semibold">${{ number_format($deposit->amount, 2) }}</span>
             </div>
         </li>
         @endforeach

@@ -15,10 +15,11 @@ class DepositController extends Controller
      */
     public function index()
     {
-        // Fetch deposits for the authenticated user
-        $deposits = Auth::user()->deposits()->orderBy('created_at', 'desc')->get();
-        
-        return view('deposits.index', compact('deposits'));
+        $user = Auth::user();
+
+        // Use pagination instead of get()
+        $deposits = Deposit::where('user_id', $user->id)->latest()->paginate(10);
+        return view('deposits.index', compact('deposits', 'user'));
     }
 
     /**
@@ -28,7 +29,8 @@ class DepositController extends Controller
      */
     public function create()
     {
-        return view('deposits.create');
+        $user = Auth::user();
+        return view('deposits.create', compact('user'));
     }
 
     /**
@@ -43,7 +45,8 @@ class DepositController extends Controller
             'amount' => 'required|numeric|min:0.01',
         ]);
 
-        // Create a new deposit for the authenticated user
+        $user = Auth::user();
+        $user->balance += $request->amount;
         Deposit::create([
             'user_id' => Auth::id(),
             'amount' => $request->amount,

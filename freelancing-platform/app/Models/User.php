@@ -1,18 +1,26 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Notification;
+use App\Models\Deposit;
+use App\Models\Withdrawal;
+use App\Models\Service;
+use App\Models\Order;
+use App\Models\Review;
+use App\Models\Verification;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'verified', 'description', 'profile_picture', 'balance'
+        'name', 'email', 'password', 'verified', 'description', 'profile_picture', 'balance','verification_paper','verification_id','username'
     ];
 
     protected $hidden = [
@@ -28,7 +36,17 @@ class User extends Authenticatable
      */
     public function notifications(): HasMany
     {
-        return $this->hasMany(Notification::class, 'user_id');
+        return $this->hasMany(Notification::class, 'user_id')->orderBy('created_at', 'desc');
+    }
+
+    public function deposits(): HasMany
+    {
+        return $this->hasMany(Deposit::class, 'user_id');
+    }
+
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class, 'user_id');
     }
 
     /**
@@ -61,5 +79,11 @@ class User extends Authenticatable
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'buyer_id');
+    }
+
+
+    public function verificationRequests()
+    {
+        return $this->hasOne(VerificationRequest::class, 'user_id');
     }
 }

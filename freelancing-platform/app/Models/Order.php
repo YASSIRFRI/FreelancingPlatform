@@ -16,6 +16,7 @@ class Order extends Model
         'status',
         'review_id',
         'amount',
+        'description'
     ];
 
     /**

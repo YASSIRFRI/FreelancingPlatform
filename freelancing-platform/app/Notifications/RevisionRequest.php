@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -7,7 +6,7 @@ use Illuminate\Notifications\Notification;
 use App\Notifications\Channels\CustomDatabaseChannel;
 
 
-class OrderCreatedNotification extends Notification
+class RevisionRequest extends Notification
 {
     use Queueable;
 
@@ -26,10 +25,9 @@ class OrderCreatedNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'user_id' => $this->order->buyer_id,
-            'title' => 'Order Created',
-            'order_id' => $this->order->id,
-            'message' => 'An order has been created for ' . $this->order->description . ' worth $' . number_format($this->order->amount, 2),
+            'user_id' => $this->order->seller_id,
+            'title' => 'Revision Requested',
+            'message' => 'A revision has been requested for your order: ' . $this->order->description,
             'is_read' => false,
         ];
     }

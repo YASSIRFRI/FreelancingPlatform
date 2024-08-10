@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use App\Notifications\Channels\CustomDatabaseChannel;
 
 
-class OrderCreatedNotification extends Notification
+class OrderRejected extends Notification
 {
     use Queueable;
 
@@ -27,9 +27,9 @@ class OrderCreatedNotification extends Notification
     {
         return [
             'user_id' => $this->order->buyer_id,
-            'title' => 'Order Created',
+            'title' => 'Order Rejected',
             'order_id' => $this->order->id,
-            'message' => 'An order has been created for ' . $this->order->description . ' worth $' . number_format($this->order->amount, 2),
+            'message' => 'Your order for ' . $this->order->description . ' has been rejected.',
             'is_read' => false,
         ];
     }

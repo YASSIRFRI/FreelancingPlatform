@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-6">Withdrawal Requests</h1>
+    <h1 class="text-green-300 text-3xl font-bold mb-6">Withdrawal Requests</h1>
 
     <!-- Success Message -->
     @if (session('success'))
@@ -77,7 +77,7 @@
 
     <!-- New Withdrawal Button -->
     <a href="{{ route('withdrawals.create') }}" class="mt-8 inline-block bg-green-500 text-white px-4 py-2 rounded shadow hover:bg-green-600 transition">
-        New Withdrawal
+        New Withdrawal <i class="fas fa-plus-circle ml-1"></i>
     </a>
 </div>
 @endsection

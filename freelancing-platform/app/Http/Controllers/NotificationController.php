@@ -67,4 +67,12 @@ class NotificationController extends Controller
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Notification deleted.');
     }
+
+    public function markAllAsRead(Request $request)
+    {
+        $user = Auth::user();
+        $user->notifications()->update(['is_read' => true]);
+
+        return response()->json(['message' => 'All notifications marked as read.']);
+    }
 }

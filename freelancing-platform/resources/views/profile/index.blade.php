@@ -4,7 +4,9 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-6">My Profile</h1>
+    <h1 class="text-green-400 text-3xl font-bold mb-6">My Profile</h1>
+
+
 
     <!-- Success & Error Messages -->
     @if (session('success'))
@@ -47,6 +49,31 @@
                     @error('profile_picture')
                         <div class="text-red-500 mt-1">{{ $message }}</div>
                     @enderror
+                </div>
+            </div>
+
+                <!-- Display Average Rating -->
+            <div class="flex items-center mb-4">
+                <div class="ml-4 flex items-center">
+                    @php
+                        $rating = $averageRating;
+                        $fullStars = floor($rating);
+                        $halfStar = ($rating - $fullStars) >= 0.5 ? true : false;
+                    @endphp
+
+                    @for ($i = 0; $i < $fullStars; $i++)
+                        <i class="fas fa-star text-yellow-500"></i>
+                    @endfor
+
+                    @if ($halfStar)
+                        <i class="fas fa-star-half-alt text-yellow-500"></i>
+                    @endif
+
+                    @for ($i = $fullStars + ($halfStar ? 1 : 0); $i < 5; $i++)
+                        <i class="far fa-star text-yellow-500"></i>
+                    @endfor
+
+                    <span class="ml-2 text-gray-700">{{ round($averageRating, 2) }} / 5</span>
                 </div>
             </div>
 

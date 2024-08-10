@@ -7,11 +7,18 @@
         
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex space-x-6 ml-8">
+            <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-green-500 font-semibold">Dashboard</a>
             <a href="{{ route('deposits.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Deposits</a>
             <a href="{{ route('withdrawals.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Withdrawals</a>
-            <a href="{{ route('services.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Services</a>
-            <a href="{{ route('market.explore') }}" class="text-gray-700 hover:text-green-500 font-semibold">Explore Market</a>
+            <!--<a href="{{ route('services.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Services</a>-->
+            <a href="{{ route('market.explore') }}" class="text-gray-700 hover:text-green-500 font-semibold">Find Sellers</a>
+            <a href="#" class="text-gray-700 hover:text-green-500 font-semibold">Share my account</a>
         </nav>
+
+        <!-- Mobile Toggle Button -->
+        <button id="navToggle" class="md:hidden text-gray-700 ml-4">
+            <i class="fas fa-bars fa-lg"></i>
+        </button>
     </div>
 
     <!-- User Profile Section -->
@@ -47,7 +54,6 @@
         <div class="relative">
             <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://via.placeholder.com/40' }}" alt="User Avatar" class="h-10 w-10 rounded-full cursor-pointer" id="profileDropdownToggle">
 
-            <!-- Dropdown Menu -->
             <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg py-2 z-10">
                 <a href="{{ route('profile.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100"><i class="fas fa-user fa-fw text-gray-700"></i> My Profile</a>
                 <form method="POST" action="{{ route('logout') }}">
@@ -60,25 +66,37 @@
 </div>
 
 <!-- Mobile Navigation -->
-<nav class="md:hidden flex space-x-4 bg-gray-100 p-2 justify-center shadow-md">
+<nav id="mobileNav" class="hidden md:hidden flex flex-col space-y-4 bg-gray-100 p-4 shadow-md">
+    <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-green-500 font-semibold">Dashboard</a>
     <a href="{{ route('deposits.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Deposits</a>
     <a href="{{ route('withdrawals.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Withdrawals</a>
-    <a href="{{ route('services.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Services</a>
+    <a href="{{ route('market.explore') }}" class="text-gray-700 hover:text-green-500 font-semibold">Find Sellers</a>
+    <a href="#" class="text-gray-700 hover:text-green-500 font-semibold">Share my account</a>
 </nav>
 
 <script>
     // Toggle for the notifications dropdown
+// Toggle for the notifications dropdown
     const notificationsToggle = document.getElementById('notificationsToggle');
     const notificationsDropdown = document.getElementById('notificationsDropdown');
 
     notificationsToggle.addEventListener('click', () => {
         notificationsDropdown.classList.toggle('hidden');
-    });
 
-    document.addEventListener('click', (event) => {
-        if (!notificationsToggle.contains(event.target) && !notificationsDropdown.contains(event.target)) {
-            notificationsDropdown.classList.add('hidden');
-        }
+        fetch("{{ route('notifications.read-all') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            // Optionally, you can update the notification count here
+            document.querySelector('#notificationsToggle .text-red-100').remove();
+        })
+        .catch(error => console.error('Error:', error));
     });
 
     // Toggle for the profile dropdown
@@ -93,5 +111,13 @@
         if (!profileDropdownToggle.contains(event.target) && !profileDropdown.contains(event.target)) {
             profileDropdown.classList.add('hidden');
         }
+    });
+
+    // Toggle for the mobile navigation
+    const navToggle = document.getElementById('navToggle');
+    const mobileNav = document.getElementById('mobileNav');
+
+    navToggle.addEventListener('click', () => {
+        mobileNav.classList.toggle('hidden');
     });
 </script>

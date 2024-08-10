@@ -6,8 +6,7 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-6">Order Service</h1>
-
+    <h1 class="text-green-400 text-3xl font-bold mb-6">Order Service</h1>
     <!-- Service Information -->
     <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
         <div class="p-4">
@@ -26,8 +25,8 @@
                 <textarea id="description" name="description" rows="4" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Add any additional details..."></textarea>
             </div>
 
-            <button type="button" id="confirmOrderButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                Order Now
+            <button type="button" id="confirmOrderButton" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                Order Now <i class="fas fa-check ml-2"></i> 
             </button>
         </div>
     </form>

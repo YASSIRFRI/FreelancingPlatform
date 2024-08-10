@@ -9,7 +9,7 @@ class Deposit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'amount', 'state'];
+    protected $fillable = ['user_id', 'amount', 'status'];
 
     public function user()
     {

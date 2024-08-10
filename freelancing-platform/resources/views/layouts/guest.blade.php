@@ -15,10 +15,6 @@
             @yield('content')
         </main>
 
-        <!-- Footer -->
-        <footer class="bg-white p-4 text-center shadow-md">
-            &copy; {{ date('Y') }} Eza
-        </footer>
     </div>
 </body>
 </html>

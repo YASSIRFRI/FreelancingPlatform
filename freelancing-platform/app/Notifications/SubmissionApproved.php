@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -7,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use App\Notifications\Channels\CustomDatabaseChannel;
 
 
-class OrderCreatedNotification extends Notification
+class SubmissionApproved extends Notification
 {
     use Queueable;
 
@@ -26,11 +27,12 @@ class OrderCreatedNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'user_id' => $this->order->buyer_id,
-            'title' => 'Order Created',
+            'user_id' => $this->order->seller_id,
             'order_id' => $this->order->id,
-            'message' => 'An order has been created for ' . $this->order->description . ' worth $' . number_format($this->order->amount, 2),
+            'title' => 'Submission Approved',
+            'message' => 'Your submission for ' . $this->order->description . ' has been approved.',
             'is_read' => false,
         ];
     }
 }
+

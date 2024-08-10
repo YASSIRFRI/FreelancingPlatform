@@ -4,62 +4,84 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-6">Explore Market</h1>
+    <h1 class="text-green-500 text-3xl font-bold mb-6">Explore Sellers<i class="fas fa-store ml-2"></i></h1>
 
     <!-- Search Form -->
     <form action="{{ route('market.explore') }}" method="GET" class="mb-8">
-        <div class="flex items-center">
-            <input type="text" name="query" placeholder="Search services by tag..." value="{{ request('query') }}" class="w-full p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
-            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-r-md hover:bg-green-600">
-                Search
+        <div class="relative flex items-center">
+            <input type="text" name="query" placeholder="Search for services, skills, or sellers..." value="{{ request('query') }}" class="w-full p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md" required>
+            <button type="submit" class="bg-green-500 text-white px-4 py-3 rounded-r-md hover:bg-green-600 transition">
+                <i class="fas fa-search"></i>
             </button>
         </div>
     </form>
 
+    <!-- Popular Tags -->
+    <div class="mb-8">
+        <h2 class="text-xl font-semibold mb-4">Popular Tags</h2>
+        <div class="flex flex-wrap gap-2">
+            @foreach (['PHP', 'Python', 'Graphic Design', 'Voice Over', 'Web Development', 'SEO Optimization', 'Content Writing', 'Video Editing', 'Digital Marketing', 'Data Analysis'] as $tag)
+                <a href="{{ route('market.explore', ['query' => $tag]) }}" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold hover:bg-blue-200 transition">{{ $tag }}</a>
+            @endforeach
+        </div>
+    </div>
+
     <!-- Search Results -->
     @if ($query)
-        <h2 class="text-2xl font-semibold mb-4">Results for "{{ $query }}"</h2>
+        <h2 class="text-2xl font-semibold mb-4">Results for <i class="fas fa-search ml-2"></i>
+            <span class="text-red-500">"{{ $query }}"</span>
+    </h2>
 
-        @if ($services->count() > 0)
+        @if ($sellers->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach ($services as $service)
+                @foreach ($sellers as $seller)
                     <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                        <img src="{{ $service->image ? asset('storage/' . $service->image) : 'https://via.placeholder.com/300' }}" alt="{{ $service->description }}" class="w-full h-48 object-cover">
-
                         <div class="p-4">
-                            <h3 class="text-xl font-bold mb-2">{{ $service->description }}</h3>
-                            <p class="text-gray-600 mb-4">{{ Str::limit($service->description, 100) }}</p>
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="text-green-600 font-semibold">${{ number_format($service->price, 2) }}</span>
-                                <span class="bg-gray-200 text-gray-800 text-sm px-2 py-1 rounded-full">{{ $service->tags }}</span>
-                            </div>
-
-                            <!-- Owner Information -->
-                            @if ($service->user)
                             <div class="flex items-center mb-4">
-                                <img src="{{ $service->user->profile_picture ? asset('storage/' . $service->user->profile_picture) : 'https://via.placeholder.com/50' }}" alt="{{ $service->user->name }}" class="w-10 h-10 rounded-full mr-3">
+                                <img src="{{ $seller->profile_picture ? asset('storage/' . $seller->profile_picture) : 'https://via.placeholder.com/50' }}" alt="{{ $seller->name }}" class="w-16 h-16 rounded-full mr-3">
                                 <div>
-                                    <h4 class="font-semibold text-gray-800">{{ $service->user->name }}</h4>
-                                    <a href="{{ route('sellers.show', $service->user->id) }}" class="text-blue-500 text-sm hover:underline">View Seller</a>
+                                    <h4 class="font-semibold text-gray-800">{{ $seller->name }}</h4>
+                                    
+                                    <!-- Display Average Rating -->
+                                    <div class="flex items-center mt-2">
+                                        @php
+                                            $rating = $seller->averageRating;
+                                            $fullStars = floor($rating);
+                                            $halfStar = ($rating - $fullStars) >= 0.5 ? true : false;
+                                        @endphp
+
+                                        @for ($i = 0; $i < $fullStars; $i++)
+                                            <i class="fas fa-star text-yellow-500"></i>
+                                        @endfor
+
+                                        @if ($halfStar)
+                                            <i class="fas fa-star-half-alt text-yellow-500"></i>
+                                        @endif
+
+                                        @for ($i = $fullStars + ($halfStar ? 1 : 0); $i < 5; $i++)
+                                            <i class="far fa-star text-yellow-500"></i>
+                                        @endfor
+
+                                        <span class="ml-2 text-gray-700">{{ round($rating, 2) }} / 5</span>
+                                    </div>
+
+                                    <div class="flex items-center mt-2">
+                                        <span class="px-2 py-1 rounded-full text-sm font-semibold {{ $seller->verified ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                            {{ $seller->verified ? 'Verified' : 'Not Verified' }}
+                                        </span>
+                                    </div>
+                                    <a href="{{ route('sellers.show', $seller->id) }}" class="text-green-500 text-sm hover:underline mt-2">View Seller <i class="fas fa-arrow-right ml-1"></i></a>
                                 </div>
                             </div>
-                            @else
-                            <div class="flex items-center mb-4">
-                                <img src="https://via.placeholder.com/50" alt="Unknown User" class="w-10 h-10 rounded-full mr-3">
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">Unknown User</h4>
-                                    <span class="text-gray-500 text-sm">No seller information available</span>
-                                </div>
+                            <div class="mb-4">
+                                <p class="text-gray-600">{{ Str::limit($seller->description, 100) }}</p>
                             </div>
-                            @endif
-
-                            <!-- Action Buttons -->
                             <div class="flex justify-between">
-                                <a href="{{ route('order.create', $service->id) }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-                                    Order Now
+                                <a href="{{ route('offers.create', $seller->id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                                    Create Offer <i class="fas fa-paper-plane ml-1"></i>
                                 </a>
-                                <a href="{{ route('services.show', $service->id) }}" class="text-blue-600 hover:text-blue-800 text-sm">
-                                    View Details
+                                <a href="{{ route('sellers.show', $seller->id) }}" class="text-green-600 hover:text-green-800 text-sm">
+                                    View Details <i class="fas fa-info-circle ml-1"></i>
                                 </a>
                             </div>
                         </div>
@@ -69,10 +91,10 @@
 
             <!-- Pagination -->
             <div class="mt-8">
-                {{ $services->appends(['query' => $query])->links() }}
+                {{ $sellers->appends(['query' => $query])->links() }}
             </div>
         @else
-            <p class="text-red-600">No services found for your search criteria.</p>
+            <p class="text-red-600">No sellers found for your search criteria.</p>
         @endif
     @endif
 </div>

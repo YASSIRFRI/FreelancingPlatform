@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Review;
 use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
@@ -18,7 +19,11 @@ class ProfileController extends Controller
     {
         $user = Auth::user(); // Get the authenticated user
 
-        return view('profile.index', compact('user'));
+        $averageRating = Review::whereHas('order', function ($query) use ($user) {
+            $query->where('seller_id', $user->id); 
+        })->avg('stars');
+
+        return view('profile.index', compact('user','averageRating'));
     }
 
     /**
@@ -31,7 +36,6 @@ class ProfileController extends Controller
     {
         $user = Auth::user(); // Get the authenticated user
 
-        // Validate the request data
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,

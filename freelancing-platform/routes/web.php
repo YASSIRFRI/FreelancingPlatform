@@ -11,6 +11,12 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SellerController;
+use App\Http\Controllers\OfferController;
+use App\Http\Controllers\MarketController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReviewController;
+use Flutterwave\Payments\Facades\Flutterwave;
+use Flutterwave\Payments\Data\Status;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     //seller views 
-    Route::get('/seller/{username}', [SellerController::class, 'show'])->name('sellers.show');
+    Route::get('/seller/{id}', [SellerController::class, 'show'])->name('sellers.show');
 
 
 
@@ -94,13 +100,113 @@ Route::middleware(['auth'])->group(function () {
 
 
     //market 
-    Route::get('/market', [ServiceController::class, 'exploreMarket'])->name('market.explore');
+    Route::get('market/explore', [MarketController::class, 'explore'])->name('market.explore');
 
 
 
-    Route::get('/order/create/{serviceId}', [OrderController::class, 'create'])->name('order.create');
-    Route::post('/order/store/{serviceId}', [OrderController::class, 'store'])->name('order.store');
+
+    //Route::get('/order/create/{serviceId}', [OrderController::class, 'create'])->name('order.create');
+    //Route::post('/order/store/{serviceId}', [OrderController::class, 'store'])->name('order.store');
     Route::get('/order/{orderid}',[OrderController::class, 'show'])->name('orders.show');
+
+
+    //offers
+    Route::resource('offers', OfferController::class);
+    Route::post('offers/{offer}/approve', [OrderController::class, 'approveOffer'])->name('offers.approve');
+    Route::get('buying-dashboard', [OfferController::class, 'buyingDashboard'])->name('buying.dashboard');
+    Route::get('selling-dashboard', [OfferController::class, 'sellingDashboard'])->name('selling.dashboard');
+
+
+
+    Route::get('orders/{order}/submit', [OrderController::class, 'submitOrder'])->name('orders.submit');
+    Route::post('orders/{order}/submit', [OrderController::class, 'storeSubmission'])->name('orders.storeSubmission');
+    Route::post('/orders/{id}/approve', [OrderController::class, 'approve'])->name('orders.complete');
+    Route::post('/orders/{id}/reject', [OrderController::class, 'reject'])->name('orders.reject');
+    Route::post('/orders/{id}/request-revision', [OrderController::class, 'requestRevision'])->name('orders.request-revision');
+    Route::get('/orders/download/{id}', [OrderController::class, 'download'])->name('orders.download');
+
+    Route::get('offers/create/{seller}', [OfferController::class, 'create'])->name('offers.create');
+    Route::post('offers/store', [OfferController::class, 'store'])->name('offers.store');
+
+
+    Route::post('offers/{offer}/approve', [OfferController::class, 'approveOffer'])->name('offers.approve');
+    Route::post('offers/{offer}/reject', [OfferController::class, 'rejectOffer'])->name('offers.reject');
+
+
+    Route::get('offers/{offer}/edit', [OfferController::class, 'edit'])->name('offers.edit');
+    Route::put('offers/{offer}', [OfferController::class, 'update'])->name('offers.update');
+    Route::delete('offers/{offer}', [OfferController::class, 'destroy'])->name('offers.destroy');
+
+
+    //payment routes 
+    //Route::get('payments', [PaymentController::class, 'initialize'])->name('payments.initialize');
+    //Route::post('rave/callback', [PaymentController::class, 'callback'])->name('payments.callback');
+
+
+    //reviews
+    Route::get('/order/review/{id}', [ReviewController::class, 'create'])->name('reviews.create');
+    Route::post('/order/review/{id}', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::get('/seller/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+
+
+    //notifications
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+
+    //deposit routes
+    Route::get('/deposits/callback', [DepositController::class, 'paymentCallback']);
+
+
+    Route::post('/flutterwave/payment/webhook', function () {
+        $method = request()->method();
+        if ($method === 'POST') {
+            $body = request()->getContent();
+            $webhook = Flutterwave::use('webhooks');
+            $transaction = Flutterwave::use('transactions');
+            $signature = request()->header($webhook::SECURE_HEADER);
+    
+            $isVerified = $webhook->verifySignature($body, $signature);
+    
+            if ($isVerified) {
+                [ 'tx_ref' => $tx_ref, 'id' => $id ] = $webhook->getHook();
+                [ 'status' => $status, 'data' => $transactionData ] = $transaction->verifyTransactionReference($tx_ref);
+    
+                $responseData = ['tx_ref' => $tx_ref, 'id' => $id];
+                if ($status === 'success') {
+                    switch ($transactionData['status']) {
+                        case Status::SUCCESSFUL:
+                            // do something
+                            //save to database
+                            //send email
+                            break;
+                        case Status::PENDING:
+                            // do something
+                            //save to database
+                            //send email
+                            break;
+                        case Status::FAILED:
+                            // do something
+                            //save to database
+                            //send email
+                            break;
+                    }
+                }
+    
+                return response()->json(['status' => 'success', 'message' => 'Webhook verified by Flutterwave Laravel Package', 'data' => $responseData]);
+            }
+    
+            return response()->json(['status' => 'error', 'message' => 'Access denied. Hash invalid'])->setStatusCode(401);
+        }
+    
+        return abort(404);
+    })->name('flutterwave.webhook');
+
+
+
+
+
+
+
+
 
 
 

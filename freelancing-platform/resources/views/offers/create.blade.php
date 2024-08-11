@@ -4,12 +4,12 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <h1 class="text-green-400 text-3xl font-bold mb-6">Send Offer to: 
+    <h1 class="text-green-400 text-3xl font-bold mb-6">Send Offer to:
         <div class="flex-col m-3">
-        <div class="text-green-800 inline font-semibold">{{ $seller->name }}
-        <div class="text-green-600 text-sm font-semibold">{{ $seller->email }}</div>
-         <img src="{{ $seller->profile_picture ? asset('storage/' . $seller->profile_picture) : 'https://via.placeholder.com/150' }}" alt="{{ $seller->name }}" class="w-12 h-12 rounded-full inline-block ml-2">
-        </div>
+            <div class="text-green-800 inline font-semibold">{{ $seller->name }}
+                <div class="text-green-600 text-sm font-semibold">{{ $seller->email }}</div>
+                <img src="{{ $seller->profile_picture ? asset('storage/' . $seller->profile_picture) : 'https://via.placeholder.com/150' }}" alt="{{ $seller->name }}" class="w-12 h-12 rounded-full inline-block ml-2">
+            </div>
         </div>
     </h1>
     @if ($errors->any())
@@ -37,7 +37,7 @@
         </div>
 
         <div class="mb-4">
-            <label for="amount" class="block text-sm font-medium text-gray-700">Revisions</label>
+            <label for="revisions" class="block text-sm font-medium text-gray-700">Revisions</label>
             <input type="number" max='10' min="1" id="revisions" name="revisions" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
         </div>
 
@@ -46,7 +46,38 @@
             <input type="date" id="deadline" name="deadline" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
         </div>
 
+        <div class="mb-4">
+            <label for="fee" class="block text-sm font-medium text-gray-700">Fee ({{ config('app.buyer_fee') }}%)</label>
+            <input type="text" id="fee" name="fee" value="0.00" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" readonly>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Total Price</label>
+            <p class="text-lg font-bold mt-2">$<span id="total-price">0.00</span></p>
+        </div>
+
         <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Submit Offer <i class="fas fa-check ml-2"></i></button>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const amountInput = document.getElementById('amount');
+        const feeInput = document.getElementById('fee');
+        const totalPriceDisplay = document.getElementById('total-price');
+
+        const buyerFeePercentage = parseFloat("{{ config('app.buyer_fee') }}");
+
+        function calculateFeeAndTotalPrice() {
+            const amount = parseFloat(amountInput.value) || 0;
+            const fee = (buyerFeePercentage / 100) * amount;
+            const totalPrice = amount + fee;
+
+            feeInput.value = fee.toFixed(2);
+            totalPriceDisplay.textContent = totalPrice.toFixed(2);
+        }
+
+        amountInput.addEventListener('input', calculateFeeAndTotalPrice);
+    });
+</script>
 @endsection

@@ -14,7 +14,8 @@ class VerificationController extends Controller
     {
         $request->validate([
             //'verification_id'=>"required|string",
-            'verification_paper' => 'required|mimes:pdf,jpg,jpeg,png'
+            'verification_paper' => 'required|mimes:jpg,jpeg,png',
+            'verifaction_image' => 'required|mimes:jpg,jpeg,png'
         ]);
         Log::info($request->all());
 

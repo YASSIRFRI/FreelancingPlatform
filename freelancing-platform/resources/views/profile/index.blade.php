@@ -127,6 +127,16 @@
                         <span class="text-base leading-normal">Select a file</span>
                         <input type="file" name="verification_paper" id="verification_paper" class="hidden">
                     </label>
+                    @error('verification_pap    er')
+                        <div class="text-red-500 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-4">
+                    <label for="verification_paper" class="block text-sm font-medium text-gray-700">Profile Picture : </label>
+                    <label class="flex items-center px-4 py-2 bg-white text-green-600 rounded-md shadow-md tracking-wide border border-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
+                        <span class="text-base leading-normal">Select a file</span>
+                        <input type="file" name="verification_image" id="verification_paper" class="hidden">
+                    </label>
                     @error('verification_paper')
                         <div class="text-red-500 mt-1">{{ $message }}</div>
                     @enderror

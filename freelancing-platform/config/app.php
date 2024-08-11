@@ -122,6 +122,8 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+    'buyer_fee' => env('BUYER_FEE', 5),
+    'seller_fee' => env('SELLER_FEE', 3),
 
     /*
     |--------------------------------------------------------------------------
@@ -231,6 +233,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+
     ],
 
 ];

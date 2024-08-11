@@ -15,6 +15,8 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\MarketController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ContactController;
 use Flutterwave\Payments\Facades\Flutterwave;
 use Flutterwave\Payments\Data\Status;
 
@@ -34,7 +36,6 @@ Route::get('/', function () {
     if (auth()->check()) {
         return redirect()->route('dashboard');
     }
-
     return redirect()->route('login');
 })->name('home');
 
@@ -43,12 +44,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminLoginController::class, 'login']);
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
-    // Route::get('/register', [AdminRegisterController::class, 'showRegistrationForm'])->name('register');
-    // Route::post('/register', [AdminRegisterController::class, 'register']);
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->middleware(['auth:admin'])->name('dashboard');
+    Route::get('/dashboard',[AdminController::class,'dashboard'])->middleware(['auth:admin'])->name('dashboard');
 });
+
+
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+
+
+
+Route::get('/terms-and-conditions', function () {
+    return view('tc');
+})->name('terms');
+
+Route::get("/how-it-works",function(){
+    return view('htw');
+})->name('htw');
+
+Route::get("/contact",function(){
+    return view('contact');
+})->name("contact");
 
 // Authenticated user routes
 Route::middleware(['auth'])->group(function () {

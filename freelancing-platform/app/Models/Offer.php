@@ -17,6 +17,7 @@ class Offer extends Model
         'deadline',
         'status',
         'revisions',
+        'fee'
     ];
 
     public function buyer()

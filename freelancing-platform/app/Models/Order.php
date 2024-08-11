@@ -20,6 +20,7 @@ class Order extends Model
         'deadline',
         'attachment',
         'description',
+        'fee'
     ];
 
     public function buyer()

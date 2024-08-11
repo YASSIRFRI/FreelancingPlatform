@@ -133,6 +133,14 @@
                                 <h4 class="text-xl font-semibold {{ $statusColor }}">{{ $order->description }}</h4>
                                 <span class="text-green-500 font-semibold text-lg">${{ number_format($order->amount, 2) }}</span>
                             </div>
+                            <div class="mb-4">
+                                <span class="text-sm text-gray-600">Fee: ${{ number_format($order->fee, 2) }}</span>
+                            </div>
+                            @if($order->status == 'completed')
+                                <div class="mb-4">
+                                    <span class="text-sm text-gray-600">Earnings: ${{ number_format($order->amount - $order->fee, 2) }}</span>
+                                </div>
+                            @endif
                             <div class="flex items-center mb-4">
                                 <i class="{{ $statusIcon }} text-lg mr-2 {{ $statusColor }}"></i>
                                 <span class="font-semibold text-md {{ $statusColor }}">{{ ucfirst($order->status) }}</span>

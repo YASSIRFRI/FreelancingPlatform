@@ -67,39 +67,6 @@ class OrderController extends Controller
         return view('orders.show', compact('order', 'user'));
     }
 
-    //public function approveOffer($offerId)
-    //{
-        //$offer = Offer::findOrFail($offerId);
-
-        //if ($offer->status === 'pending') {
-            //$offer->update(['status' => 'approved']);
-
-            //$order=Order::create([
-                //'offer_id' => $offer->id,
-                //'buyer_id' => $offer->buyer_id,
-                //'seller_id' => $offer->seller_id,
-                //'review_id' => null,
-                //'status' => 'in-progress',
-                //'amount' => $offer->amount,
-                //'deadline' => $offer->deadline,
-                //'description' => $offer->description,
-            //]);
-            //$buyer = User::findOrFail($offer->buyer_id);
-            //try {
-                //$buyer = User::findOrFail($offer->buyer_id);
-                //Log::info('Offer approved successfully', ['offer_id' => $offer->id, 'buyer_id' => $buyer->id]);
-                //$buyer->balance -= $offer->amount;
-                //$buyer->save();
-            //}catch (\Exception $e) {
-                //Log::error('Buyer balance update failed', ['buyer_id' => $buyer->id]);
-            //}
-            //$buyer->notify(new OrderCreatedNotification($order));
-            //Log::info('Buyer balance updated successfully', ['buyer_id' => $buyer->id]);
-            //return redirect()->route('selling.dashboard')->with('success', 'Offer approved and order created successfully');
-        //}
-
-        //return redirect()->route('selling.dashboard')->with('error', 'Offer cannot be approved');
-    //}
 
     public function submitOrder($orderId)
     {
@@ -142,7 +109,7 @@ class OrderController extends Controller
         }
         $order->status = 'completed';
         $order->save();
-        $order->offer->seller->balance += $order->amount;
+        $order->offer->seller->balance += ($order->amount-$order->fee);
         $order->offer->seller->save();
         //notify the buyer
         $order->seller->notify(new SubmissionApproved($order));

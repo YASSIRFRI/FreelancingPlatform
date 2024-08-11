@@ -23,6 +23,11 @@
 <!-- Navigation Grid -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 
+    <a href="{{route('market.explore')}}" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
+        <i class="fas fa-store fa-2x mb-2 md:mb-0 md:mr-2"></i>
+        Market
+    </a>
+
     <!-- Deposit Route -->
     <a href="{{ route('deposits.index') }}" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
         <i class="fas fa-wallet fa-2x mb-2 md:mb-0 md:mr-2"></i>
@@ -54,28 +59,25 @@
     </a>
 
     <!-- How It Works Button -->
-    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
+    <a href="{{route('htw')}}" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
         <i class="fas fa-info-circle fa-2x mb-2 md:mb-0 md:mr-2"></i>
         How It Works
     </a>
 
     <!-- Terms & Conditions and Privacy & Policy Button -->
-    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
+    <a href="{{route('terms')}}" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
         <i class="fas fa-file-contract fa-2x mb-2 md:mb-0 md:mr-2"></i>
         T&C, P&P
     </a>
 
     <!-- Contact Us Button -->
-    <a href="#" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
+    <a href="{{route('contact')}}" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
         <i class="fas fa-phone-alt fa-2x mb-2 md:mb-0 md:mr-2"></i>
         Contact Us
     </a>
 
     <!-- Market Button -->
-    <a href="{{route('market.explore')}}" class="bg-white shadow rounded-lg p-6 flex flex-row md:flex-col items-center justify-center text-green-600 font-semibold text-xl transform transition-transform hover:scale-105 border border-green-500">
-        <i class="fas fa-store fa-2x mb-2 md:mb-0 md:mr-2"></i>
-        Market
-    </a>
+
 </div>
 
 <!-- Latest Orders -->

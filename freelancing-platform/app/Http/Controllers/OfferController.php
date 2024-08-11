@@ -32,13 +32,14 @@ class OfferController extends Controller
             'seller_id' => 'required|exists:users,id',
             'description' => 'required|string',
             'amount' => 'required|numeric',
+            'fee' => 'required|numeric',
             'deadline' => 'required|date',
             'revisions' => 'required|numeric',
         ]);
 
         $seller_id = $request->input('seller_id');
         $user = auth()->user();
-        if ($user->balance < $request->amount) {
+        if ($user->balance < ($request->amount+$request->fee)) {
             return redirect()->route('offers.create', $seller_id)->with('error', 'Insufficient balance');
         }
 
@@ -47,6 +48,7 @@ class OfferController extends Controller
             'seller_id' => $seller_id,
             'description' => $request->input('description'),
             'amount' => $request->input('amount'),
+            'fee' => $request->input('fee'),
             'deadline' => $request->input('deadline'),
             'status' => 'pending',
         ]);
@@ -80,7 +82,7 @@ class OfferController extends Controller
 
         if ($offer->status === 'pending') {
             $offer->update(['status' => 'approved']);
-            
+            Log::info("seller fee is ".config('app.seller_fee'));
             $order = Order::create([
                 'offer_id' => $offer->id,
                 'buyer_id' => $offer->buyer_id,
@@ -88,12 +90,14 @@ class OfferController extends Controller
                 'review_id' => null,
                 'status' => 'in-progress',
                 'amount' => $offer->amount,
+                'fee' => $offer->amount*(config('app.seller_fee')/100),
                 'deadline' => $offer->deadline,
                 'description' => $offer->description,
             ]);
             $buyer = User::find($offer->buyer_id);
             $buyer->notify(new OfferAccepted($offer));
             $buyer->balance -= $offer->amount;
+            $buyer->balance-= $offer->fee;
             $buyer->save();
             Log::info('Offer approved successfully', ['offer_id' => $offer->id, 'buyer_id' => $buyer->id]);
             $seller = User::find($offer->seller_id);
@@ -113,6 +117,7 @@ class OfferController extends Controller
 
             $buyer = User::find($offer->buyer_id);
             $buyer->balance += $offer->amount;
+            $buyer->balance+= $offer->fee;
             $buyer->save();
 
             $buyer->notify(new OfferRejected($offer));
@@ -147,6 +152,8 @@ class OfferController extends Controller
     {
         $buyer = User::find($offer->buyer_id);
         $buyer->balance += $offer->amount;
+        $buyer->balance+= $offer->fee;
+        $buyer->save();
         $offer->delete();
         $user = auth()->user();
         return redirect()->route('buying.dashboard', 'user')->with('success', 'Offer removed successfully');

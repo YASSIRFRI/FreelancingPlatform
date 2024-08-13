@@ -53,7 +53,7 @@
                         <div class="bg-white border {{ $borderColor }} shadow rounded-lg p-4 transition-transform transform hover:scale-105">
                             <div class="flex justify-between items-center mb-4">
                                 <h4 class="text-xl font-semibold {{ $statusColor }}">{{ $offer->description }}</h4>
-                                <span class="text-green-500 font-semibold text-lg">${{ number_format($offer->amount, 2) }}</span>
+                                <span class="text-green-500 font-semibold text-lg">GNC{{ number_format($offer->amount, 2) }}</span>
                             </div>
                             <div class="flex items-center mb-4">
                                 <i class="{{ $statusIcon }} text-lg mr-2 {{ $statusColor }}"></i>
@@ -129,7 +129,7 @@
                     <div class="bg-white border {{ $borderColor }} shadow rounded-lg p-4 transition-transform transform hover:scale-105">
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="text-xl font-semibold {{ $statusColor }}">{{ $order->description }}</h4>
-                            <span class="text-green-500 font-semibold text-lg">${{ number_format($order->amount, 2) }}</span>
+                            <span class="text-green-500 font-semibold text-lg">GNC {{ number_format($order->amount, 2) }}</span>
                         </div>
                         <div class="flex items-center mb-4">
                             <i class="{{ $statusIcon }} text-lg mr-2 {{ $statusColor }}"></i>

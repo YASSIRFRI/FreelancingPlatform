@@ -28,7 +28,7 @@
                         <td class="py-3 px-4 text-sm text-gray-900">{{ $order->id }}</td>
                         <td class="py-3 px-4 text-sm text-gray-900">{{ $order->service->name }}</td>
                         <td class="py-3 px-4 text-sm text-gray-900">{{ $order->buyer->name }}</td>
-                        <td class="py-3 px-4 text-sm text-gray-900">${{ number_format($order->amount, 2) }}</td>
+                        <td class="py-3 px-4 text-sm text-gray-900">GNC {{ number_format($order->amount, 2) }}</td>
                         <td class="py-3 px-4 text-sm text-gray-900">{{ ucfirst($order->status) }}</td>
                         <td class="py-3 px-4 text-sm text-gray-900">
                             <a href="{{ route('orders.show', $order->id) }}" class="text-green-600 hover:text-green-800">View</a>

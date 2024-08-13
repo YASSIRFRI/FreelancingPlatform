@@ -45,6 +45,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/login', [AdminLoginController::class, 'login']);
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
     Route::get('/dashboard',[AdminController::class,'dashboard'])->middleware(['auth:admin'])->name('dashboard');
+    Route::patch('/verify/{id}', [AdminController::class, 'verify'])->name('verify');
+});
+
+
+
+
+
+Route::middleware('auth:admin')->group(function () {
+    Route::get('/admin/edit-content', [AdminController::class, 'editContent'])->name('admin.edit_content');
+    Route::post('/admin/update-content', [AdminController::class, 'updateContent'])->name('admin.update_content');
+    Route::patch('/admin/unverify-user/{id}', [AdminController::class, 'unverifyUser'])->name('admin.unverify_user');
+    Route::patch('/admin/deny-verification/{id}', [AdminController::class, 'denyVerification'])->name('admin.deny_verification');
+    Route::post('/admin/withdrawals/{id}/approve', [AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve');
+    Route::post('/admin/withdrawals/{id}/deny', [AdminController::class, 'denyWithdrawal'])->name('admin.withdrawals.deny');
+    Route::post('/admin/update_fees', [AdminController::class, 'updateFees'])->name('admin.update_fees');
+
 });
 
 
@@ -75,7 +91,7 @@ Route::middleware(['auth'])->group(function () {
     // Withdrawal routes
     Route::resource('withdrawals', WithdrawalController::class)->only(['index', 'create', 'store']);
 
-    // Profile routes
+    // Profile routesj
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
@@ -154,8 +170,10 @@ Route::middleware(['auth'])->group(function () {
 
 
     //payment routes 
-    //Route::get('payments', [PaymentController::class, 'initialize'])->name('payments.initialize');
-    //Route::post('rave/callback', [PaymentController::class, 'callback'])->name('payments.callback');
+    // Laravel 8 & 9
+    Route::post('/pay', [PaymentController::class, 'redirectToGateway'])->name('pay');
+    Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallback']);
+
 
 
     //reviews
@@ -169,51 +187,6 @@ Route::middleware(['auth'])->group(function () {
 
     //deposit routes
     Route::get('/deposits/callback', [DepositController::class, 'paymentCallback']);
-
-
-    Route::post('/flutterwave/payment/webhook', function () {
-        $method = request()->method();
-        if ($method === 'POST') {
-            $body = request()->getContent();
-            $webhook = Flutterwave::use('webhooks');
-            $transaction = Flutterwave::use('transactions');
-            $signature = request()->header($webhook::SECURE_HEADER);
-    
-            $isVerified = $webhook->verifySignature($body, $signature);
-    
-            if ($isVerified) {
-                [ 'tx_ref' => $tx_ref, 'id' => $id ] = $webhook->getHook();
-                [ 'status' => $status, 'data' => $transactionData ] = $transaction->verifyTransactionReference($tx_ref);
-    
-                $responseData = ['tx_ref' => $tx_ref, 'id' => $id];
-                if ($status === 'success') {
-                    switch ($transactionData['status']) {
-                        case Status::SUCCESSFUL:
-                            // do something
-                            //save to database
-                            //send email
-                            break;
-                        case Status::PENDING:
-                            // do something
-                            //save to database
-                            //send email
-                            break;
-                        case Status::FAILED:
-                            // do something
-                            //save to database
-                            //send email
-                            break;
-                    }
-                }
-    
-                return response()->json(['status' => 'success', 'message' => 'Webhook verified by Flutterwave Laravel Package', 'data' => $responseData]);
-            }
-    
-            return response()->json(['status' => 'error', 'message' => 'Access denied. Hash invalid'])->setStatusCode(401);
-        }
-    
-        return abort(404);
-    })->name('flutterwave.webhook');
 
 
 

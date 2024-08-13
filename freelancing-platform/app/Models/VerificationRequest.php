@@ -12,7 +12,7 @@ class VerificationRequest extends Model
     protected $fillable = [
         'user_id',
         'verification_paper',
-        'verifaction_image',
+        'verification_image',
         'status',
     ];
 

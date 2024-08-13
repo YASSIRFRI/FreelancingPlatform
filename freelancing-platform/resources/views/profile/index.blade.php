@@ -6,8 +6,6 @@
 <div class="container mx-auto px-4">
     <h1 class="text-green-400 text-3xl font-bold mb-6">My Profile</h1>
 
-
-
     <!-- Success & Error Messages -->
     @if (session('success'))
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -38,21 +36,22 @@
                         @endif
                     </span>
                 </div>
-                
+
                 <!-- Profile Picture Upload -->
                 <div class="flex flex-col">
                     <label class="block text-sm font-medium text-gray-700 mt-2">Profile Picture</label>
                     <label class="flex items-center px-4 py-2 bg-white text-green-600 rounded-md shadow-md tracking-wide border border-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
                         <span class="text-base leading-normal">Select a file</span>
-                        <input type="file" name="profile_picture" class="hidden">
+                        <input type="file" name="profile_picture" class="hidden" onchange="showPreview(event, 'profile_picture_preview')">
                     </label>
+                    <img id="profile_picture_preview" src="" class="mt-2 h-20 w-20 rounded-full hidden">
                     @error('profile_picture')
                         <div class="text-red-500 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
-                <!-- Display Average Rating -->
+            <!-- Display Average Rating -->
             <div class="flex items-center mb-4">
                 <div class="ml-4 flex items-center">
                     @php
@@ -122,30 +121,48 @@
             <form action="{{ route('verification.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
-                    <label for="verification_paper" class="block text-sm font-medium text-gray-700">Verification Paper (ID, Passport)</label>
+                    <label for="verification_paper" class="block text-sm font-medium text-gray-700">1. Please upload a clear picture of your National ID Card or Passport.<span class='text-red-500'>(Max 15MB)</span></label>
                     <label class="flex items-center px-4 py-2 bg-white text-green-600 rounded-md shadow-md tracking-wide border border-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
                         <span class="text-base leading-normal">Select a file</span>
-                        <input type="file" name="verification_paper" id="verification_paper" class="hidden">
+                        <input type="file" name="verification_paper" id="verification_paper" class="hidden" onchange="showPreview(event, 'verification_paper_preview')">
                     </label>
-                    @error('verification_pap    er')
-                        <div class="text-red-500 mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="mb-4">
-                    <label for="verification_paper" class="block text-sm font-medium text-gray-700">Profile Picture : </label>
-                    <label class="flex items-center px-4 py-2 bg-white text-green-600 rounded-md shadow-md tracking-wide border border-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
-                        <span class="text-base leading-normal">Select a file</span>
-                        <input type="file" name="verification_image" id="verification_paper" class="hidden">
-                    </label>
+                    <img id="verification_paper_preview" src="" class="mt-2 h-20 w-20 hidden">
                     @error('verification_paper')
                         <div class="text-red-500 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
-                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <div class="mb-4">
+                    <label for="verification_image" class="block text-sm font-medium text-gray-700">2. Please take a selfie of you holding Your card. The picture should be very clear.<span class='text-red-500'>(Max 15MB)</span></label>
+                    <label class="flex items-center px-4 py-2 bg-white text-green-600 rounded-md shadow-md tracking-wide border border-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
+                        <span class="text-base leading-normal">Select a file</span>
+                        <input type="file" name="verification_image" id="verification_image" accept="image/*" class="hidden" onchange="showPreview(event, 'verification_image_preview')" capture="user">
+                    </label>
+                    <img id="verification_image_preview" src="" class="mt-2 h-20 w-20 hidden">
+                    @error('verification_image')
+                        <div class="text-red-500 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                     Submit Verification <i class="fas fa-check ml-2"></i>
                 </button>
             </form>
         @endif
     </div>
 </div>
+
+<script>
+    function showPreview(event, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @endsection

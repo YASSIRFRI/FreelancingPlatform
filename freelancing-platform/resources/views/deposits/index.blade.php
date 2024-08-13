@@ -48,7 +48,7 @@
                         @endphp
                         <tr class="border-b hover:bg-gray-100">
                             <td class="py-3 px-4 text-sm text-gray-900">{{ $deposit->id }}</td>
-                            <td class="py-3 px-4 text-sm text-gray-900">${{ number_format($deposit->amount, 2) }}</td>
+                            <td class="py-3 px-4 text-sm text-gray-900">{{ number_format($deposit->amount, 2) }} GNC</td>
                             <td class="py-3 px-4 text-sm text-gray-900">{{ $deposit->created_at->format('M d, Y') }}</td>
                             <td class="py-3 px-4 text-sm {{ $color }} font-semibold uppercase">{{ ucfirst($deposit->status) }}</td>
                         </tr>

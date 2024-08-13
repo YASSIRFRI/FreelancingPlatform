@@ -25,10 +25,10 @@
         @foreach ($withdrawals as $withdrawal)
             @php
                 // Determine the color based on the state using if-else
-                if ($withdrawal->state === 'approved') {
+                if ($withdrawal->state === 'completed') {
                     $color = 'border-green-500 bg-green-50 text-green-700';
                     $icon = 'check-circle';
-                    $statusText = 'APPROVED';
+                    $statusText = 'COMPLETED';
                 } elseif ($withdrawal->state === 'pending') {
                     $color = 'border-yellow-500 bg-yellow-50 text-yellow-700';
                     $icon = 'clock';
@@ -54,7 +54,7 @@
                 </div>
 
                 <!-- Amount -->
-                <div class="text-lg font-bold">${{ number_format($withdrawal->amount, 2) }}</div>
+                <div class="text-lg font-bold">{{ number_format($withdrawal->amount, 2) }} GNC</div>
 
                 <!-- Status -->
                 <div class="flex items-center space-x-2">

@@ -1,47 +1,46 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
-use Flutterwave\EventHandlers\EventHandlerInterface;
-use Flutterwave\Rave\Facades\Rave;
 
-class PaymentController extends Controller {
-    public function initiatePayment(Request $request) {
-        $rave = new Rave(env('FLW_PUBLIC_KEY'), env('FLW_SECRET_KEY'));
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
+use Paystack;
 
-        $data = [
-            'amount' => $request->amount,
-            'payment_type' => 'card',
-            'currency' => $request->currency,
-            'tx_ref' => uniqid(),
-            'redirect_url' => url('/payment/callback'),
-            'customer' => [
-                'email' => $request->email,
-                'name' => $request->name
-            ],
-            'meta' => [
-                'price' => $request->amount
-            ]
-        ];
+class PaymentController extends Controller
+{
 
-        $payment = $rave->initializePayment($data);
-
-        if ($payment['status'] === 'success') {
-            return redirect($payment['data']['link']);
-        } else {
-            return back()->withErrors(['error' => 'Failed to initiate payment.']);
-        }
+    /**
+     * Redirect the User to Paystack Payment Page
+     * @return Url
+     */
+    public function redirectToGateway()
+    {
+        try{
+            return Paystack::getAuthorizationUrl()->redirectNow();
+        }catch(\Exception $e) {
+            Log::info("Payment Failed");
+            Log::info(dd($e));
+            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
+        }        
     }
 
-    public function paymentCallback() {
-        $rave = new Rave(env('FLW_PUBLIC_KEY'), env('FLW_SECRET_KEY'));
-        $response = $rave->verifyTransaction(request()->tx_ref);
+    /**
+     * Obtain Paystack payment information
+     * @return void
+     */
+    public function handleGatewayCallback()
+    {
+        $paymentDetails = Paystack::getPaymentData();
 
-        if ($response['status'] === 'success') {
-            // Payment successful
-            return view('payment-success');
-        } else {
-            // Payment failed
-            return view('payment-failure');
-        }
+        dd($paymentDetails);
+        Log:info(dd($paymentDetails));
+        // Now you have the payment details,
+        // you can store the authorization_code in your db to allow for recurrent subscriptions
+        // you can then redirect or do whatever you want
+
     }
 }

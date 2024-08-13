@@ -13,17 +13,24 @@ class VerificationController extends Controller
     public function submit(Request $request)
     {
         $request->validate([
-            //'verification_id'=>"required|string",
-            'verification_paper' => 'required|mimes:jpg,jpeg,png',
-            'verifaction_image' => 'required|mimes:jpg,jpeg,png'
+            'verification_paper' => 'required|mimes:jpg,jpeg,png|max:15360',
+            'verification_image' => 'required|mimes:jpg,jpeg,png|max:15360'
         ]);
+        
         Log::info($request->all());
 
-        $path = $request->file('verification_paper')->store('verification_papers', 'public');
+        $userId = Auth::id();
+        
+        $directory = "verification_papers/{$userId}";
 
+        $paperPath = $request->file('verification_paper')->storeAs($directory, 'id_paper.jpg', 'public');
+        
+        // Store the verification image as id_image
+        $imagePath = $request->file('verification_image')->storeAs($directory, 'id_image.jpg', 'public');
         VerificationRequest::create([
-            'user_id' => Auth::id(),
-            'verification_paper' => $path,
+            'user_id' => $userId,
+            'verification_paper' => $paperPath,
+            'verification_image' => $imagePath, 
             'status' => 'pending',
         ]);
 

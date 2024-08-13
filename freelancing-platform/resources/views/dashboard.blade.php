@@ -9,14 +9,14 @@
 <div class="bg-white shadow rounded-lg p-6 mb-8 flex flex-col md:flex-row justify-between items-center">
     <div class="text-center mb-4 md:mb-0">
         <h3 class="text-2xl font-bold">Total Deposit</h3>
-        <p class="text-green-500 text-xl font-semibold">${{ number_format($user->deposits->sum('amount'), 2) }}</p>
+        <p class="text-green-500 text-xl font-semibold">GNC {{ number_format($user->deposits->sum('amount'), 2) }}</p>
     </div>
     <div class="w-24 h-24 relative flex items-center justify-center mb-4 md:mb-0">
         <canvas id="depositsBalanceChart" width="96" height="96"></canvas>
     </div>
     <div class="text-center">
         <h3 class="text-2xl font-bold">Current Balance</h3>
-        <p class="text-green-500 text-xl font-semibold">${{ number_format($user->balance, 2) }}</p>
+        <p class="text-green-500 text-xl font-semibold">GNC {{ number_format($user->balance, 2) }}</p>
     </div>
 </div>
 
@@ -106,7 +106,7 @@
                     @endif
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-green-500 font-semibold">${{ number_format($order->amount, 2) }}</span>
+                    <span class="text-green-500 font-semibold">GNC{{ number_format($order->amount, 2) }}</span>
                     @if($order->attachment)
                         {{ route('orders.download', $order->id) }}" class="text-green-500 hover:text-green-700 transition">
                             <i class="fas fa-download"></i> <span class="sr-only">Download Attachments</span>
@@ -131,7 +131,7 @@
                     <h3 class="text-lg font-semibold">New Deposit</h3>
                     <p class="text-gray-600">{{ $deposit->created_at->format('M d, Y') }}</p>
                 </div>
-                <span class="text-green-500 font-semibold">${{ number_format($deposit->amount, 2) }}</span>
+                <span class="text-green-500 font-semibold">GNC  {{ number_format($deposit->amount, 2) }}</span>
             </div>
         </li>
         @endforeach

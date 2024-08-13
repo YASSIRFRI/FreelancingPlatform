@@ -15,34 +15,21 @@
 <div class="flex items-center justify-center min-h-screen mt-4">
     <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl">
         <div class="w-full p-8">
-            <h1 class="text-3xl font-bold text-center mb-6">Contact Us</h1>
+            @php
+                try {
+                    $contactContent = Storage::get('contact.html');
+                } catch (\Exception $e) {
+                    $contactContent = '<p class="text-red-500">Sorry, the contact information could not be loaded at this time.</p>';
+                }
+            @endphp
 
-            <h2 class="text-xl font-semibold mb-4">1. Our Contact Information</h2>
-            <p class="text-gray-600 mb-4">
-                If you have any questions or need assistance, please feel free to reach out to us. Our customer support team is here to help you.
-            </p>
-            <ul class="list-disc list-inside text-gray-600 mb-4">
-                <li>Email: support@eza.com</li>
-                <li>Phone: +123 456 7890</li>
-                <li>Address: 123 Eza Street, City, Country</li>
-            </ul>
-
-            <h2 class="text-xl font-semibold mb-4">2. Business Hours</h2>
-            <p class="text-gray-600 mb-4">
-                Our business hours are as follows:
-            </p>
-            <ul class="list-disc list-inside text-gray-600 mb-4">
-                <li>Monday to Friday: 9:00 AM - 6:00 PM</li>
-                <li>Saturday: 10:00 AM - 4:00 PM</li>
-                <li>Sunday: Closed</li>
-            </ul>
-
+            {!! $contactContent !!}
+            
+            <!-- Contact Form -->
             <h2 class="text-xl font-semibold mb-4">3. Send Us a Message</h2>
             <p class="text-gray-600 mb-4">
                 If you prefer, you can use the form below to send us a message directly. We strive to respond to all inquiries within 24 hours.
             </p>
-
-            <!-- Contact Form -->
             <form method="POST" action="{{ route('contact.submit') }}">
                 @csrf
                 <div class="mb-4">

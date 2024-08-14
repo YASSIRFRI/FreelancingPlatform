@@ -13,8 +13,8 @@
 </div>
 
 <div class="flex items-center justify-center min-h-screen mt-4">
-    <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl">
-        <div class="w-full p-8">
+    <div class="bg-white shadow-md rounded-lg w-full max-w-4xl">
+        <div class="w-full">
             @php
                 $termsConditionsContent = Storage::get('terms_conditions.html');
             @endphp

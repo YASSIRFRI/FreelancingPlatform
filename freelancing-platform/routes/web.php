@@ -35,9 +35,19 @@ use Flutterwave\Payments\Data\Status;
 Route::get('/', function () {
     if (auth()->check()) {
         return redirect()->route('dashboard');
+    }else{
+        return redirect('/landing');
     }
-    return redirect()->route('login');
 })->name('home');
+
+
+Route::get('/landing', function () {
+    return view('landing');
+})->name('landing');
+        
+Route::get('/next', function () {
+    return view('next');
+})->name('next');
 
 // Admin routes
 Route::prefix('admin')->name('admin.')->group(function () {

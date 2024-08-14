@@ -13,8 +13,7 @@
 </div>
 
 <div class="flex items-center justify-center min-h-screen">
-    <!-- The flex-col class will make the layout stack vertically on small screens, while the sm:flex-row class will switch it back to a row layout on larger screens -->
-    <div class="flex flex-col sm:flex-row items-between bg-white shadow-md rounded-lg p-8 w-full max-w-4xl">
+    <div class="flex flex-col sm:flex-row items-between bg-white shadow-md rounded-lg p-8 max-w-4xl">
         <!-- Right Side with Login Form (will appear first on mobile) -->
         <div class="w-full sm:w-1/2 p-8 flex justify-center items-center order-2 sm:order-1">
             <div class="max-w-sm w-full">
@@ -44,28 +43,6 @@
             </div>
         </div>
 
-        <!-- Left Side with Green Circles (will appear below on mobile) -->
-        <div class="w-full sm:w-1/2 flex flex-col justify-center items-center order-1 sm:order-2">
-            <div class="flex flex-col items-center justify-center">
-                <!-- First Green Circle -->
-                <div class="bg-green-600 p-8 text-white rounded-full flex items-center justify-center mb-8">
-                    <div class="text-center">
-                        <h2 class="text-2xl font-bold">WELCOME TO</h2>
-                        <h1 class="text-4xl font-bold">EZA</h1>
-                        <p class="mt-4 text-sm">SECURE YOUR BUSINESS DEALS ONLINE OR OFFLINE</p>
-                    </div>
-                </div>
-                <!-- Second Green Circle -->
-                <div class="bg-green-600 p-8 text-white rounded-full flex items-center justify-center">
-                    <div class="text-center">
-                        <h2 class="text-2xl font-bold">AFRICA'S NO. 1 ESCROW PAYMENT PLATFORM</h2>
-                        <p class="mt-4 text-sm">
-                            As a buyer, let the product or service be fully delivered before you approve payment AND as a seller, let the buyer make full payment before starting the project for the buyer.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 @endsection

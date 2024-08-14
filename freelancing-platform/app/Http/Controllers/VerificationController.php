@@ -13,8 +13,8 @@ class VerificationController extends Controller
     public function submit(Request $request)
     {
         $request->validate([
-            'verification_paper' => 'required|mimes:jpg,jpeg,png|max:15360',
-            'verification_image' => 'required|mimes:jpg,jpeg,png|max:15360'
+            'verification_paper' => 'required|mimes:jpg,jpeg,png|max:6000',
+            'verification_image' => 'required|mimes:jpg,jpeg,png|max:6000'
         ]);
         
         Log::info($request->all());

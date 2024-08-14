@@ -51,6 +51,18 @@
         </div>
     </div>
 
+    <!-- Share Account Link Section -->
+    <div class="bg-white p-6 shadow-md rounded-lg mb-6">
+        <h2 class="text-xl font-bold mb-4">Share Your Profile Link</h2>
+        <div class="flex items-center">
+            <input type="text" id="profileLink" class="border border-gray-300 rounded-lg p-2 w-full sm:w-2/3 text-gray-700" value="{{ url('/seller/' . $seller->id) }}" readonly>
+            <button onclick="copyToClipboard()" class="ml-4 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                <i class="fas fa-copy mr-2"></i>Copy Link
+            </button>
+        </div>
+        <p id="copyMessage" class="text-green-500 mt-2 hidden">Copied to clipboard!</p>
+    </div>
+
     <!-- Recent Reviews Section -->
     <h2 class="text-2xl font-bold mb-4">Recent Reviews</h2>
     <div class="bg-white p-6 shadow-md rounded-lg overflow-x-auto">
@@ -90,4 +102,20 @@
     </div>
 
 </div>
+<script>
+    function copyToClipboard() {
+        var copyText = document.getElementById("profileLink");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+
+        var copyMessage = document.getElementById("copyMessage");
+        copyMessage.classList.remove("hidden");
+
+        setTimeout(function() {
+            copyMessage.classList.add("hidden");
+        }, 3000);
+    }
+</script>
 @endsection
+

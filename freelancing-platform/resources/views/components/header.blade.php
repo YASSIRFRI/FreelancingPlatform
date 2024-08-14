@@ -12,7 +12,7 @@
             <a href="{{ route('withdrawals.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Withdrawals</a>
             <!--<a href="{{ route('services.index') }}" class="text-gray-700 hover:text-green-500 font-semibold">Services</a>-->
             <a href="{{ route('market.explore') }}" class="text-gray-700 hover:text-green-500 font-semibold">Find Sellers</a>
-            <a href="#" class="text-gray-700 hover:text-green-500 font-semibold">Share my account</a>
+            <a href="{{route('sellers.show',Auth::user())}}" class="text-gray-700 hover:text-green-500 font-semibold">Share my account</a>
         </nav>
 
         <!-- Mobile Toggle Button -->

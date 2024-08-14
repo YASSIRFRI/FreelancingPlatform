@@ -121,7 +121,7 @@
             <form action="{{ route('verification.submit') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
-                    <label for="verification_paper" class="block text-sm font-medium text-gray-700">1. Please upload a clear picture of your National ID Card or Passport.<span class='text-red-500'>(Max 15MB)</span></label>
+                    <label for="verification_paper" class="block text-sm font-medium text-gray-700">1. Please upload a clear picture of your National ID Card or Passport.<span class='text-red-500'>(Max 5MB)</span></label>
                     <label class="flex items-center px-4 py-2 bg-white text-green-600 rounded-md shadow-md tracking-wide border border-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
                         <span class="text-base leading-normal">Select a file</span>
                         <input type="file" name="verification_paper" id="verification_paper" class="hidden" onchange="showPreview(event, 'verification_paper_preview')">
@@ -132,7 +132,7 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="verification_image" class="block text-sm font-medium text-gray-700">2. Please take a selfie of you holding Your card. The picture should be very clear.<span class='text-red-500'>(Max 15MB)</span></label>
+                    <label for="verification_image" class="block text-sm font-medium text-gray-700">2. Please take a selfie of you holding Your card. The picture should be very clear.<span class='text-red-500'>(Max 5MB)</span></label>
                     <label class="flex items-center px-4 py-2 bg-white text-green-600 rounded-md shadow-md tracking-wide border border-green-600 cursor-pointer hover:bg-green-600 hover:text-white">
                         <span class="text-base leading-normal">Select a file</span>
                         <input type="file" name="verification_image" id="verification_image" accept="image/*" class="hidden" onchange="showPreview(event, 'verification_image_preview')" capture="user">

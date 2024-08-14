@@ -54,7 +54,7 @@
                 </div>
 
                 <!-- Amount -->
-                <div class="text-lg font-bold">{{ number_format($withdrawal->amount, 2) }} GNC</div>
+                <div class="text-lg font-bold">{{ number_format($withdrawal->amount, 2) }} GHC</div>
 
                 <!-- Status -->
                 <div class="flex items-center space-x-2">

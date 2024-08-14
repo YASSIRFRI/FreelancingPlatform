@@ -47,13 +47,13 @@
         </div>
 
         <div class="mb-4">
-            <label for="fee" class="block text-sm font-medium text-gray-700">Fee ({{ config('app.buyer_fee') }}%)</label>
+            <label for="fee" class="block text-sm font-medium text-gray-700">Fee</label>
             <input type="text" id="fee" name="fee" value="0.00" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" readonly>
         </div>
 
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Total Price</label>
-            <p class="text-lg font-bold mt-2">GNC<span id="total-price">0.00</span></p>
+            <p class="text-lg font-bold mt-2">GHC<span id="total-price">0.00</span></p>
         </div>
 
         <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Submit Offer <i class="fas fa-check ml-2"></i></button>

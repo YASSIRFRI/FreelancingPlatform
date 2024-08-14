@@ -29,12 +29,10 @@
         <footer class="bg-green-800 text-white p-6 mt-12 shadow-inner">
     <div class="container mx-auto flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0">
         <div class="text-center sm:text-left">
-            <p class="text-lg font-semibold">&copy; {{ date('Y') }} Freelancing Platform</p>
+            <p class="text-lg font-semibold">&copy; {{ date('Y') }} No. 1 Escrow platform.</p>
         </div>
         <div class="text-center sm:text-right">
-            <a href="#" class="text-white hover:text-gray-200 transition-colors">Privacy Policy</a>
-            <span class="mx-2">|</span>
-            <a href="#" class="text-white hover:text-gray-200 transition-colors">Terms of Service</a>
+            <a href={{route("terms")}} class="text-white hover:text-gray-200 transition-colors">Terms of Service</a>
         </div>
     </div>
 </footer>

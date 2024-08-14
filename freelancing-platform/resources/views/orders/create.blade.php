@@ -12,7 +12,7 @@
         <div class="p-4">
             <h2 class="text-xl font-bold">{{ $service->name }}</h2>
             <p class="text-gray-600">{{ $service->description }}</p>
-            <span class="text-green-600 font-semibold">GNC {{ number_format($service->price, 2) }}</span>
+            <span class="text-green-600 font-semibold">GHC {{ number_format($service->price, 2) }}</span>
         </div>
     </div>
 

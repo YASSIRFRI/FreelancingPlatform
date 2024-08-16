@@ -1,5 +1,5 @@
 <!-- resources/views/auth/register.blade.php -->
-@extends('layouts.guest')
+@extends('layouts.app')
 
 @section('title', 'Register')
 
@@ -20,6 +20,10 @@
             <div class="mb-4">
                 <label for="email" class="block text-sm font-medium text-gray-700">Username</label>
                 <input type="text" name="username" id="username" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm p-2">
+            </div>
+            <div class="mb-4">
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                <input type="phone" name="phone_number" id="username" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm p-2">
             </div>
             <div class="mb-4">
                 <label for="password" class="block text-sm font-medium text-gray-700">Password</label>

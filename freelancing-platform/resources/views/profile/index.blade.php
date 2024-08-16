@@ -24,7 +24,7 @@
         <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <!-- Profile Picture and Verification Status -->
+            <!-- Profile Picture and Verification Status and phone Number -->
             <div class="flex items-center mb-4">
                 <div class="flex flex-col items-center">
                     <img src="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : 'https://via.placeholder.com/80' }}" alt="Profile Picture" class="h-20 w-20 rounded-full mr-4">
@@ -81,6 +81,14 @@
                 <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                 <input type="text" name="name" id="name" value="{{ $user->name }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm p-2">
                 @error('name')
+                    <div class="text-red-500 mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+            <!--Display Phone Number-->
+            <div class="mb-4">
+                <label for="phone_number" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input type="phone" name="phone_number" id="phone_number" value="{{ $user->phone_number }}" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm p-2">
+                @error('phone_number')
                     <div class="text-red-500 mt-1">{{ $message }}</div>
                 @enderror
             </div>

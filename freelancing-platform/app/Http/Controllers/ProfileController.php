@@ -40,6 +40,7 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'phone_number' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
@@ -59,6 +60,7 @@ class ProfileController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->description = $request->description;
+        $user->phone_number = $request->phone_number;
         $user->save();
 
         return redirect()->route('profile.index')->with('success', 'Profile updated successfully.');

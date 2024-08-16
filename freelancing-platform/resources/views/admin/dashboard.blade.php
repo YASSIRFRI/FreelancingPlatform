@@ -5,20 +5,19 @@
 @section('username', $user->username)
 
 @section('content')
-<!-- Earnings Summary -->
-<div class="bg-white shadow rounded-lg p-6 mb-8 flex flex-col md:flex-row justify-between items-center">
-    <div class="text-center mb-4 md:mb-0">
+<div class="bg-white shadow rounded-lg p-6 mb-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+    <div class="mb-4 md:mb-0 md:w-1/2">
         <h3 class="text-2xl font-bold">Today's Earnings</h3>
         <p class="text-green-500 text-xl font-semibold">${{ number_format($todaysEarnings, 2) }}</p>
     </div>
-    <div class="text-center">
+    <div class="md:w-1/2">
         <h3 class="text-2xl font-bold">Overall Earnings</h3>
         <p class="text-green-500 text-xl font-semibold">${{ number_format($overallEarnings, 2) }}</p>
     </div>
 </div>
 
 <!-- Verification Requests -->
-<div class="bg-white shadow rounded-lg p-6 mb-8">
+<div class="bg-white shadow rounded-lg p-6 mb-8 overflow-x-auto">
     <h2 class="text-blue-600 text-2xl font-bold mb-4">Verification Requests <i class="fas fa-user-check text-blue-500"></i></h2>
     <table class="min-w-full bg-white">
         <thead>
@@ -65,7 +64,7 @@
 </div>
 
 <!-- Withdrawal Requests -->
-<div class="bg-white shadow rounded-lg p-6 mb-8">
+<div class="bg-white shadow rounded-lg p-6 mb-8 overflow-x-auto">
     <h2 class="text-green-600 text-2xl font-bold mb-4">Withdrawal Requests <i class="fas fa-money-check-alt text-green-500"></i></h2>
     <table class="min-w-full bg-white">
         <thead>
@@ -101,7 +100,7 @@
 </div>
 
 <!-- Users Management -->
-<div class="bg-white shadow rounded-lg p-6 mb-8">
+<div class="bg-white shadow rounded-lg p-6 mb-8 overflow-x-auto">
     <h2 class="text-purple-600 text-2xl font-bold mb-4">User Management <i class="fas fa-users text-purple-500"></i></h2>
     <table class="min-w-full bg-white">
         <thead>
@@ -109,6 +108,7 @@
                 <th class="py-2 px-4 border-b border-gray-200 text-left">User</th>
                 <th class="py-2 px-4 border-b border-gray-200 text-left">Email</th>
                 <th class="py-2 px-4 border-b border-gray-200 text-left">Verification Status</th>
+                <th class="py-2 px-4 border-b border-gray-200 text-left">Documents</th>
                 <th class="py-2 px-4 border-b border-gray-200 text-left">Action</th>
             </tr>
         </thead>
@@ -117,7 +117,6 @@
                 <tr>
                     <td class="py-2 px-4 border-b border-gray-200">{{ $user->name }}</td>
                     <td class="py-2 px-4 border-b border-gray-200">{{ $user->email }}</td>
-
                     <td class="py-2 px-4 border-b border-gray-200">
                         @if ($user->verified)
                             <span class="text-green-500 font-semibold">Verified</span>
@@ -125,6 +124,29 @@
                             <span class="text-red-500 font-semibold">Not Verified</span>
                         @endif
                     </td>
+                    <td class="py-2 px-4 border-b border-gray-200">
+    @if ($user->verificationRequests && $user->verificationRequests->count() > 0)
+        @php
+            $latestRequest = $user->verificationRequests->first();
+        @endphp
+
+        @if ($latestRequest->verification_paper || $latestRequest->verification_image)
+            <a href="{{ Storage::url($latestRequest->verification_paper) }}" class="text-blue-500 hover:text-blue-700 transition">
+                <i class="fas fa-download"></i> ID Paper
+            </a>
+            <a href="{{ Storage::url($latestRequest->verification_image) }}" class="text-blue-500 hover:text-blue-700 transition ml-4">
+                <i class="fas fa-download"></i> ID Image
+            </a>
+        @else
+            <span class="text-gray-500">No Documents</span>
+        @endif
+    @else
+        <span class="text-gray-500">No Documents</span>
+    @endif
+</td>
+
+
+
                     <td class="py-2 px-4 border-b border-gray-200">
                         @if ($user->verified)
                             <form action="{{ route('admin.unverify_user', $user->id) }}" method="POST">

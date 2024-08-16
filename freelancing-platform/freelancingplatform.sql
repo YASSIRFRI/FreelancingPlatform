@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 13, 2024 at 11:31 PM
+-- Generation Time: Aug 16, 2024 at 11:57 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.13
 
@@ -361,6 +361,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `profile_picture` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_ci,
   `email_verified_at` timestamp NULL DEFAULT NULL,
@@ -374,15 +375,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `verification_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `name`, `email`, `profile_picture`, `description`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `verified`, `verification_paper`, `balance`, `verification_id`) VALUES
-(4, 'yassir', 'YASSIR FRI', 'yassirfri318@gmail.com', 'profile_pictures/BdGWtJabzQEmD8cDUIqTWO7Kwm2SEGm7rj95uIYS.jpg', 'web', NULL, '$2y$10$qO7xRbbeZORdDk8JjG/2T.tG.V8xaXqlp0s9zlDe17QE6cEVVJ986', NULL, '2024-08-09 16:12:17', '2024-08-13 22:25:39', 1, NULL, 1385, NULL),
-(5, 'ziad', 'ziad fri', 'ziadfri318@gmail.com', NULL, 'I develop web applications', NULL, '$2y$10$Or3cD6ChoBqerkLhCoMBh.3qOhV5o.5bu8O7OlZq9TgXo3wT9T.Ca', NULL, '2024-08-09 16:13:47', '2024-08-13 22:29:54', 0, NULL, 275, NULL);
+INSERT INTO `users` (`id`, `username`, `name`, `email`, `phone_number`, `profile_picture`, `description`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `verified`, `verification_paper`, `balance`, `verification_id`) VALUES
+(4, 'yassir', 'YASSIR FRI', 'yassirfri318@gmail.com', '060000000', 'profile_pictures/BdGWtJabzQEmD8cDUIqTWO7Kwm2SEGm7rj95uIYS.jpg', 'web', NULL, '$2y$10$qO7xRbbeZORdDk8JjG/2T.tG.V8xaXqlp0s9zlDe17QE6cEVVJ986', NULL, '2024-08-09 16:12:17', '2024-08-13 22:25:39', 1, NULL, 1385, NULL),
+(5, 'ziad', 'ziad fri', 'ziadfri318@gmail.com', '06000000', NULL, 'I develop web applications', NULL, '$2y$10$Or3cD6ChoBqerkLhCoMBh.3qOhV5o.5bu8O7OlZq9TgXo3wT9T.Ca', NULL, '2024-08-09 16:13:47', '2024-08-13 22:29:54', 0, NULL, 275, NULL),
+(6, 'test_test', 'test', 'test@test.com', '06000001', NULL, NULL, NULL, '$2y$10$jWsjJz.BzcWmTLLziyc4pequIvl5oLdOU.5zDU706ey/y3ra41kIu', NULL, '2024-08-15 09:23:38', '2024-08-15 09:29:57', 0, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 

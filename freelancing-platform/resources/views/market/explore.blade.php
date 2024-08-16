@@ -71,6 +71,12 @@
                                         </span>
                                     </div>
                                     <a href="{{ route('sellers.show', $seller->id) }}" class="text-green-500 text-sm hover:underline mt-2">View Seller <i class="fas fa-arrow-right ml-1"></i></a>
+                                    <!--phone number-->
+                                    <div class="flex items">
+                                        <span class="text-sm font-semibold text-gray-700">Phone Number:</span>
+                                        <span class="text-sm font-semibold text-gray-700">{{ $seller->phone_number }}</span>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="mb-4">
@@ -80,8 +86,8 @@
                                 <a href="{{ route('offers.create', $seller->id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
                                     Create Offer <i class="fas fa-paper-plane ml-1"></i>
                                 </a>
-                                <a href="{{ route('sellers.show', $seller->id) }}" class="text-green-600 hover:text-green-800 text-sm">
-                                    View Details <i class="fas fa-info-circle ml-1"></i>
+                                <a href="{{ route('sellers.show', $seller->id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                                    Contact Me<i class="fas fa-phone ml-1"></i>
                                 </a>
                             </div>
                         </div>
@@ -138,6 +144,11 @@
                                     </span>
                                 </div>
                                 <a href="{{ route('sellers.show', $seller->id) }}" class="text-green-500 text-sm hover:underline mt-2">View Seller <i class="fas fa-arrow-right ml-1"></i></a>
+                                <!--phone number-->
+                                <div class="flex items">
+                                    <span class="text-sm font-semibold text-gray-700">Phone: </span>
+                                    <span class="text-sm font-semibold text-gray-700"> {{ $seller->phone_number }}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-4">
@@ -147,8 +158,8 @@
                             <a href="{{ route('offers.create', $seller->id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
                                 Create Offer <i class="fas fa-paper-plane ml-1"></i>
                             </a>
-                            <a href="{{ route('sellers.show', $seller->id) }}" class="text-green-600 hover:text-green-800 text-sm">
-                                View Details <i class="fas fa-info-circle ml-1"></i>
+                            <a href="{{ route('sellers.show', $seller->id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">
+                                Contact Me<i class="fas fa-phone ml-1"></i>
                             </a>
                         </div>
                     </div>

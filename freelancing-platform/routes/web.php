@@ -92,6 +92,12 @@ Route::get("/contact",function(){
 })->name("contact");
 
 // Authenticated user routes
+
+
+Route::get('market/explore', [MarketController::class, 'explore'])->name('market.explore');
+Route::get('/seller/{id}', [SellerController::class, 'show'])->name('sellers.show');
+
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -122,7 +128,6 @@ Route::middleware(['auth'])->group(function () {
 
 
     //seller views 
-    Route::get('/seller/{id}', [SellerController::class, 'show'])->name('sellers.show');
 
 
 
@@ -140,8 +145,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    //market 
-    Route::get('market/explore', [MarketController::class, 'explore'])->name('market.explore');
 
 
 

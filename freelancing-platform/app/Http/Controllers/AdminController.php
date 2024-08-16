@@ -11,42 +11,65 @@ use App\Models\VerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
 
 
 class AdminController extends Controller
 {
-public function dashboard()
-{
-    $user = auth()->user();
-    $verificationRequests = VerificationRequest::with('user')->where('status', 'pending')->get();
-    $todaysEarnings = Order::where('status', 'completed')->whereDate('created_at', now()->today())->sum('fee') + Offer::whereHas('order', function ($query) {
-        $query->where('status', 'completed');
-    })->whereDate('created_at', now()->today())->sum('fee');
-    $overallEarnings = Order::where('status', 'completed')->sum('fee') + Offer::whereHas('order', function ($query) {
-        $query->where('status', 'completed');
-    })->sum('fee');
-    $recentOrders = Order::with('seller')->latest()->take(10)->get();
-    $withdrawalRequests = Withdrawal::where('state', 'pending')->get();
-
-    // Load content from files
-    $termsConditionsContent = Storage::get('terms_conditions.html');
-    $contactContent = Storage::get('contact.html');
-    $howItWorksContent = Storage::get('how_it_works.html');
-    $users=User::All();
-
-    return view('admin.dashboard', compact(
-        'verificationRequests',
-        'todaysEarnings',
-        'overallEarnings',
-        'recentOrders',
-        'user',
-        'termsConditionsContent',
-        'contactContent',
-        'howItWorksContent',
-        'users',
-        'withdrawalRequests'
-    ));
-}
+    public function dashboard()
+    {
+        $user = auth()->user();
+        
+        $verificationRequests = VerificationRequest::with('user')
+            ->where('status', 'pending')
+            ->get();
+    
+        $todaysEarnings = Order::where('status', 'completed')
+            ->whereDate('created_at', now()->today())
+            ->sum('fee') + Offer::whereHas('order', function ($query) {
+                $query->where('status', 'completed');
+            })
+            ->whereDate('created_at', now()->today())
+            ->sum('fee');
+    
+        $overallEarnings = Order::where('status', 'completed')
+            ->sum('fee') + Offer::whereHas('order', function ($query) {
+                $query->where('status', 'completed');
+            })
+            ->sum('fee');
+    
+        $recentOrders = Order::with('seller')
+            ->latest()
+            ->take(10)
+            ->get();
+    
+        $withdrawalRequests = Withdrawal::where('state', 'pending')
+            ->get();
+    
+        // Load content from files
+        $termsConditionsContent = Storage::get('terms_conditions.html');
+        $contactContent = Storage::get('contact.html');
+        $howItWorksContent = Storage::get('how_it_works.html');
+    
+        // Fetch all users and their latest verification request
+        $users = User::with(['verificationRequests' => function($query) {
+            $query->latest()->first();
+        }])->get();
+    
+        return view('admin.dashboard', compact(
+            'verificationRequests',
+            'todaysEarnings',
+            'overallEarnings',
+            'recentOrders',
+            'user',
+            'termsConditionsContent',
+            'contactContent',
+            'howItWorksContent',
+            'users',
+            'withdrawalRequests',
+        ));
+    }
+    
 
     public function approveVerification($id)
     {
@@ -88,6 +111,7 @@ public function dashboard()
         return view('admin.edit_content');
     }
 
+
     public function updateContent(Request $request)
     {
         $request->validate([
@@ -96,17 +120,14 @@ public function dashboard()
             'how_it_works' => 'required|string',
         ]);
     
-        // Update the Terms and Conditions file
-        Storage::disk('views')->put('terms_conditions.blade.php', $request->input('terms_conditions'));
-    
-        // Update the Contact file
-        Storage::disk('views')->put('contact.blade.php', $request->input('contact'));
-    
-        // Update the How It Works file
-        Storage::disk('views')->put('how_it_works.blade.php', $request->input('how_it_works'));
+        // Store content in separate HTML files in the storage
+        Storage::disk('local')->put('terms_conditions.html', $request->input('terms_conditions'));
+        Storage::disk('local')->put('contact.html', $request->input('contact'));
+        Storage::disk('local')->put('how_it_works.html', $request->input('how_it_works'));
     
         return redirect()->route('admin.dashboard')->with('success', 'Content updated successfully.');
     }
+    
 
     public function denyVerification($id)
     {
